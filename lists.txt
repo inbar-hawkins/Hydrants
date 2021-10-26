@@ -1,0 +1,4 @@
+triger: 1,2,3,5,6,7
+status: 1,0
+value_liters_range:1,200
+value_bars_range:3,5
