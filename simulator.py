@@ -1,5 +1,6 @@
 import random
 from urllib.parse import urlparse
+import xlrd
 
 URL_FULL = "https://hyd-srv.oz-tms.com/bingoqr/api/addHydrantLog/I/05XXXXXXXX/T/6/V/0/S/0"
 URL_BASIC = "https://hyd-srv.oz-tms.com/bingoqr/api/addHydrantLog/I/"
@@ -28,21 +29,24 @@ def get_bars_range():
         bars_range = fl.readlines()
     return bars_range[3].strip().split(":")[1]
 
+#  this function get an exel file - only xls file, with hydrants phone numbers in one column,and return it in list
+
 
 def get_phone():
-    return "0526663334"
+    # exel file path
+    file = (r"C:\Users\USER\.vscode\Inbar's Projects\LearningPython\Hydrants\hydrants_phones.xls")
+    wb = xlrd.open_workbook(file)
+    sheet = wb.sheet_by_index(0)
+    sheet.cell_value(0, 0)
+
+    return [sheet.cell_value(i, 0) for i in range(sheet.nrows)]
 
 
-# TRIGERS = get_trigers().split(":")[1].split(',')
 TRIGERS = get_trigers()
 STATUS = get_status()
 LITERS_RANGE = get_liters_range()
 BARS_RANGE = get_bars_range()
-
-print(STATUS)
-print(TRIGERS)
-print(LITERS_RANGE)
-print(BARS_RANGE)
+PHONES = get_phone()
 
 start_liter = LITERS_RANGE.split(",")[0]
 end_liter = LITERS_RANGE.split(",")[1]
@@ -53,18 +57,7 @@ triger = random.choice(TRIGERS)
 status = random.choice(STATUS)
 liters = random.randrange(int(start_liter), int(end_liter))
 bars = random.randrange(int(start_bar), int(end_bar))
-phone = get_phone()
+phone = random.choice(PHONES)
 
 url = {f"{URL_BASIC}{phone}/T/{triger}/V/{liters}/S/{status}"}
 print(url)
-
-print(f"triger is {triger}")
-print(f"status is {status}")
-print(f"liters are {liters}")
-print(f"bars are {bars}")
-
-
-# def get_phone_number():
-# HYDRANTS_PHONES = ["0544555444", "0544564654", "0545554545", "0526663334"]
-
-#
